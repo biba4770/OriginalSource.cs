@@ -1,0 +1,34 @@
+using Oxide.Core;
+using Oxide.Core.Libraries;
+using System;
+
+namespace Oxide.Modules.Script
+{
+    [LibraryReference(typeof(OriginalSource))]
+    public class Aimbot : Script
+    {
+        public Aimbot() : base("Aimbot") { }
+
+        public override void Ready()
+        {
+            Base.Libraries.Add<OriginalSource>("OS");
+        }
+
+        public virtual void WaitReady(int level)
+        {
+            // Attend que le joueur soit prêt
+            foreach (var o in level.Others)
+            {
+                // Exemple : Si on vise avec une main
+                var p = o.Self;
+                if (p != null)
+                {
+                    // Logique de lissage
+                    p.Rotation = p.Rotation.Smooth(out Vector3 f, 1, 1);
+                }
+            }
+        }
+
+        public override void ProcessEntity(Entity self)
+        {
+            // 'self' est l'entité (souvent un Joueur dans un scenario)
